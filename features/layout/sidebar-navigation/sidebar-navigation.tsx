@@ -146,6 +146,8 @@ const LinkList = styled(List)`
 
 const CollapseMenuItem = styled(MenuItemButton)`
   display: none;
+  ${(props) =>
+    props.isCollapsed ? "transform: rotate(180deg);" : "color: blue;"};
 
   @media (min-width: ${breakpoint("desktop")}) {
     display: flex;
