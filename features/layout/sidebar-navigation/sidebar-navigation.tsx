@@ -1,10 +1,11 @@
 import { useRouter } from "next/router";
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import styled, { css } from "styled-components";
 import { Routes } from "@config/routes";
 import { NavigationContext } from "./navigation-context";
 import { MenuItemButton } from "./menu-item-button";
 import { MenuItemLink } from "./menu-item-link";
+import { useWindowSize } from "hooks/useWindowSize";
 import { Button } from "@features/ui";
 import { breakpoint, color, space, zIndex } from "@styles/theme";
 
@@ -156,15 +157,24 @@ const CollapseMenuItem = styled(MenuItemButton)`
 
 export function SidebarNavigation() {
   const router = useRouter();
+  const [width] = useWindowSize();
   const { isSidebarCollapsed, toggleSidebar } = useContext(NavigationContext);
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isMobileView, setIsMobileView] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    width < 1024 ? setIsMobileView(true) : setIsMobileView(false);
+  }, [width]);
+
   return (
     <Container isCollapsed={isSidebarCollapsed}>
       <FixedContainer>
         <Header>
           <Logo
             src={
-              isSidebarCollapsed
+              isMobileView
+                ? "/icons/logo-large.svg"
+                : isSidebarCollapsed
                 ? "/icons/logo-small.svg"
                 : "/icons/logo-large.svg"
             }
